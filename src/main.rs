@@ -4,7 +4,7 @@
 mod quicksort;
 mod rainbow;
 mod scramble;
-use rainbow::Tricolors;
+use rainbow::Rainbow;
 use std::io::{stdin, stdout, Write};
 // use termion::event::Key;
 // use termion::input::TermRead;
@@ -19,16 +19,19 @@ fn main() {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
 
-    let mut tricolors = Tricolors::new(stdin, stdout.lock());
+    let mut tricolors = Rainbow::new(stdin, stdout.lock());
 
     tricolors.show();
     thread::sleep(time::Duration::from_secs(2));
 
     tricolors.scramble();
-
+tricolors.show();
+    thread::sleep(time::Duration::from_secs(2));
     tricolors.heapify();
-
-    tricolors.heapsort();
+tricolors.show();
+    thread::sleep(time::Duration::from_secs(2));
+    tricolors.heapsort();tricolors.show();
+    thread::sleep(time::Duration::from_secs(2));
 }
 
 // testing the heapify function

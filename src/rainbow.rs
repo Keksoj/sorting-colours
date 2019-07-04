@@ -8,21 +8,21 @@ use termion::raw::RawTerminal;
 use termion::{clear, color, cursor, style, terminal_size};
 
 #[derive(Debug)]
-pub struct Tricolors<R, W: Write> {
+pub struct Rainbow<R, W: Write> {
     stdout: W,
     stdin: R,
-    red_green_blue: Vec<Vec<u8>>,
+    rgb: Vec<Vec<u8>>,
     x: u16,
     y: u16,
 }
 
-impl<R: Read, W: Write> Tricolors<R, W> {
-    pub fn new(stdin: R, stdout: W) -> Tricolors<R, RawTerminal<W>> {
+impl<R: Read, W: Write> Rainbow<R, W> {
+    pub fn new(stdin: R, stdout: W) -> Rainbow<R, RawTerminal<W>> {
         // calculate from where we will draw the game
         let display_x = (terminal_size().unwrap().0 / 2) + 10;
         let display_y = (terminal_size().unwrap().1 / 2);
 
-        // create the
+        // create the rgb vectors
         let mut red: Vec<u8> = Vec::new();
         let mut green: Vec<u8> = Vec::new();
         let mut blue: Vec<u8> = Vec::new();
@@ -31,51 +31,42 @@ impl<R: Read, W: Write> Tricolors<R, W> {
             green.push(n);
             blue.push(n);
         }
-        let mut red_green_blue: Vec::new();
-        red_green_blue.push(red);
-        red_green_blue.push(green);
-        red_green_blue.push(blue);
-        Tricolors {
+        let mut rgb: Vec<Vec<u8>> = Vec::new();
+        rgb.push(red);
+        rgb.push(green);
+        rgb.push(blue);
+
+        Rainbow {
             stdout: stdout.into_raw_mode().unwrap(),
-            stdin: stdin,
-            red,
-            green,
-            blue,
+            stdin,
+            rgb,
             x: display_x,
             y: display_y,
         }
     }
 
     pub fn scramble(&mut self) {
-        scramble(&mut self.red);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
-
-        scramble(&mut self.green);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
-
-        scramble(&mut self.blue);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
+        for vector in self.rgb.iter_mut() {
+            scramble(vector);
+            thread::sleep(time::Duration::from_secs(2));
+            // self.show();
+        }
     }
 
     pub fn heapify(&mut self) {
-        heapify_vector(&mut self.red);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
-
-        heapify_vector(&mut self.green);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
-
-        heapify_vector(&mut self.blue);
-        self.show();
-        thread::sleep(time::Duration::from_secs(2));
+        for vector in self.rgb.iter_mut() {
+            heapify_vector(vector);
+            thread::sleep(time::Duration::from_secs(2));
+            // self.show();
+        }
     }
 
-    pub fn heapsort(&mut self) {
-        heapsort_vector(&mut self, &mut self.red);
+    pub fn heapsort(&mut self.rgb) {
+        for vector in self.rgb.iter_mut() {
+            heapsort_vector(vector);
+            thread::sleep(time::Duration::from_secs(2));
+            // self.show();
+        }
     }
 
     pub fn show(&mut self) {
@@ -96,9 +87,9 @@ impl<R: Read, W: Write> Tricolors<R, W> {
                 self.stdout,
                 "{}  ", // there is a space here !
                 termion::color::Bg(termion::color::Rgb(
-                    self.red[index],
-                    self.green[index],
-                    self.blue[index]
+                    self.rgb[0][index],
+                    self.rgb[1][index],
+                    self.rgb[2][index]
                 )),
             )
             .unwrap();
@@ -115,8 +106,6 @@ pub fn heapsort_vector(vector: &mut Vec<u8>) {
     loop {
         // swap the ends of the range we work on
         vector.swap(0, last_index);
-        // the first element being the biggest, it is now at the end, sorted
-        // println!("swapped the ends___________: {:?}", vector);
 
         // trickle down
         let mut i: usize = 0;
@@ -127,8 +116,6 @@ pub fn heapsort_vector(vector: &mut Vec<u8>) {
             if l >= last_index || r >= last_index {
                 break;
             }
-            crate::rainbow::Tricolors::show(&mut tricolors);
-            thread::sleep(time::Duration::from_millis(100));
 
             if vector[l] > vector[r] {
                 if vector[i] < vector[l] {
