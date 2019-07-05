@@ -21,17 +21,7 @@ fn main() {
 
     let mut tricolors = Rainbow::new(stdin, stdout.lock());
 
-    tricolors.show();
-    thread::sleep(time::Duration::from_secs(2));
-
-    tricolors.scramble();
-tricolors.show();
-    thread::sleep(time::Duration::from_secs(2));
-    tricolors.heapify();
-tricolors.show();
-    thread::sleep(time::Duration::from_secs(2));
-    tricolors.heapsort();tricolors.show();
-    thread::sleep(time::Duration::from_secs(2));
+    tricolors.run();
 }
 
 // testing the heapify function

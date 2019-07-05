@@ -19,8 +19,8 @@ pub struct Rainbow<R, W: Write> {
 impl<R: Read, W: Write> Rainbow<R, W> {
     pub fn new(stdin: R, stdout: W) -> Rainbow<R, RawTerminal<W>> {
         // calculate from where we will draw the game
-        let display_x = (terminal_size().unwrap().0 / 2) + 10;
-        let display_y = (terminal_size().unwrap().1 / 2);
+        let x = (terminal_size().unwrap().0 / 2) + 10;
+        let y = (terminal_size().unwrap().1 / 2);
 
         // create the rgb vectors
         let mut red: Vec<u8> = Vec::new();
@@ -40,34 +40,34 @@ impl<R: Read, W: Write> Rainbow<R, W> {
             stdout: stdout.into_raw_mode().unwrap(),
             stdin,
             rgb,
-            x: display_x,
-            y: display_y,
+            x,
+            y,
         }
     }
 
-    pub fn scramble(&mut self) {
-        for vector in self.rgb.iter_mut() {
-            scramble(vector);
-            thread::sleep(time::Duration::from_secs(2));
-            // self.show();
+    pub fn run(&mut self) {
+        // scramble all three colors
+        self.show();
+        for i in 0..3 {
+            scramble(&mut self.rgb[i]);
+            thread::sleep(time::Duration::from_secs(4));
+            self.show();
+        }
+
+        // heapify all three colors
+        for i in 0..3 {
+            heapify_vector(&mut self.rgb[i]);
+            thread::sleep(time::Duration::from_secs(4));
+            self.show();
+        }
+        // heapsort all three colors
+        for i in 0..3 {
+            heapsort_vector(&mut self.rgb[i]);
+            thread::sleep(time::Duration::from_secs(4));
+            self.show();
         }
     }
 
-    pub fn heapify(&mut self) {
-        for vector in self.rgb.iter_mut() {
-            heapify_vector(vector);
-            thread::sleep(time::Duration::from_secs(2));
-            // self.show();
-        }
-    }
-
-    pub fn heapsort(&mut self.rgb) {
-        for vector in self.rgb.iter_mut() {
-            heapsort_vector(vector);
-            thread::sleep(time::Duration::from_secs(2));
-            // self.show();
-        }
-    }
 
     pub fn show(&mut self) {
         write!(
