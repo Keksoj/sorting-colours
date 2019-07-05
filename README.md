@@ -12,10 +12,12 @@ Heapsort implies to first build a *binary heap*, a kind of binary tree in which 
 Then we swap the first element (the largest in the array) with the last one, which has two consequences :
 
 1. The array has its largest element at the end - sorting has begun
-2. The rules of the binary heap are violated, since its top element is not the biggest.
+2. The rules of the binary heap are violated, since its first element is not the larger than its children.
 
-We have to compare it to its children and perform the swap if necessary, all the way down. This process has several name, I like *trickle down*.  
+We have to compare it to its children and perform the swap if necessary, all the way down. This process has several names, I like *trickle down*.  
 Then swap the new first element (which is the *second* largest of the array) with the *second to last* one, which will trickle down, and so on, and so forth.
+
+The main documentation for this exercise has been [wikipedia's article on binary heaps](https://www.wikiwand.com/en/Binary_heap).
 
 ## About the colours
 
@@ -28,6 +30,8 @@ write!(
     termion::color::Bg(termion::color::Rgb(red, green, blue))
   ).unwrap();
 ```
+
+where red, green and blue are of type `u8`: bytes.
 
 So what I did is build three vectors of bytes like so:
 
