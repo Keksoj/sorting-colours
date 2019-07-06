@@ -1,5 +1,7 @@
 // 2019-06-27
 // Let's dive into sorting algorithms.
+
+
 use rand::Rng;
 use std::cmp::Ordering;
 use std::io::{stdin, stdout, Write};
@@ -33,14 +35,15 @@ fn main() {
     }
 }
 
+// This struct contains all three vectors of RGB values
 #[derive(Debug)]
 pub struct Rainbow {
     rgb: Vec<Vec<u8>>,
 }
 
 impl Rainbow {
+    // create the red, green and blue vectors, each of the shape [0, 1, 2, ..255]
     pub fn new() -> Rainbow {
-        // create the rgb vectors
         let mut red: Vec<u8> = Vec::new();
         let mut green: Vec<u8> = Vec::new();
         let mut blue: Vec<u8> = Vec::new();
@@ -58,6 +61,7 @@ impl Rainbow {
     }
 }
 
+// This is Termion's way of displaying a square of colours.
 pub fn show<W: Write>(stdout: &mut W, rainbow: &Rainbow) {
     write!(
         stdout,
@@ -87,6 +91,8 @@ pub fn show<W: Write>(stdout: &mut W, rainbow: &Rainbow) {
 }
 
 pub fn scramble<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
+    // swap a random element of the left half with a random element of the right
+    // half, reapeat a thousand times. Surely not optimal, but it works
     for _n in 0..1000 {
         let random_index: usize = rand::thread_rng().gen_range(0, 128);
         let random_other: usize = rand::thread_rng().gen_range(128, rainbow.rgb[color].len());
@@ -97,67 +103,66 @@ pub fn scramble<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
     }
 }
 
-// the heapify function takes a scrambled vector, pushes its element into a new
-// binary heap, at the bottom, and make it trickle up
+// the heapify function takes a scrambled vector and constructs a binary heap
+// in place, iterating and trickling up each element
 pub fn heapify<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
-    match rainbow.rgb[color][1].cmp(&rainbow.rgb[color][0]) {
-        // if the new element is greater, swap it with the root
-        Ordering::Greater => rainbow.rgb[color].swap(1, 0),
-        Ordering::Less => {}
-        Ordering::Equal => {}
-    }
 
-    // add a third element and repeat the comparison with the ROOT
-    match rainbow.rgb[color][2].cmp(&rainbow.rgb[color][0]) {
-        // if the new element is greater, swap it with the root
-        Ordering::Greater => rainbow.rgb[color].swap(2, 0),
-        Ordering::Less => {}
-        Ordering::Equal => {}
-    }
-
-    for i in 3..(rainbow.rgb[color].len() - 1) {
+    for i in 1..(rainbow.rgb[color].len() - 1) {
         let mut index = i;
-        // trickle it up
         loop {
-            if index == 0 {
-                break;
-            }
+            // find the parent of the element
             let p_i = find_parent(index);
 
-            // if greater than its parent, swap them. If not, we're done
+            // compare element with parent, swap them if necessary.
             if rainbow.rgb[color][index] > rainbow.rgb[color][p_i] {
                 rainbow.rgb[color].swap(index, p_i);
+                // the next iteration of the loop will handle the parent
                 index = p_i;
+                // display and wait a bit (for display purpose)
                 show(&mut stdout, &rainbow);
                 thread::sleep(time::Duration::from_millis(50));
-
             } else {
+                break; // break if the parent was actually larger
+            }
+            // Break if we reached the to of the binary heap
+            if index == 0 {
                 break;
             }
         }
     }
 }
 
+// The heapsort function takes a max_heap (a binary heap where each element is
+// greater than its children), swap the first element with the last.
+    // the largest element is now at the last position (sorting has begun)
+    // the new first element violates the property of the heap (it is too small)
+    // and we trickle down to its appropriate position.
+// Repeat by swaping the new first element with the second to last
 pub fn heapsort<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
     // find the index of the last element
     let mut last_index = rainbow.rgb[color].len() - 1;
 
-    // Swap that last element and tricke it down
     loop {
         // swap the ends of the range we work on
         rainbow.rgb[color].swap(0, last_index);
 
-        // trickle down
+        // Trickle down the element of index 0
         let mut i: usize = 0;
         loop {
             // find the indexes of the left and right children
             let l = i * 2 + 1;
             let r = i * 2 + 2;
+            // break if we reached the limit of the studied range
             if l >= last_index || r >= last_index {
                 break;
             }
+
+            // Display and wait
             show(&mut stdout, &rainbow);
             thread::sleep(time::Duration::from_millis(50));
+
+            // Compare with the children, swap if necessary
+            // case one: larger child is the left one
             if rainbow.rgb[color][l] > rainbow.rgb[color][r] {
                 if rainbow.rgb[color][i] < rainbow.rgb[color][l] {
                     rainbow.rgb[color].swap(i, l);
@@ -165,7 +170,7 @@ pub fn heapsort<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
                 } else {
                     break;
                 }
-            // case two: bigger child is right
+            // case two: larger child is the right one
             } else {
                 if rainbow.rgb[color][i] < rainbow.rgb[color][r] {
                     rainbow.rgb[color].swap(i, r);
@@ -175,11 +180,11 @@ pub fn heapsort<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
                 }
             }
         }
-        // we're done when we reached index 1
+        // we're done when we reached index 0
         if last_index == 0 {
             break;
         }
-        // reduce the range
+        // last element is now sorted, reduce the range we work on
         last_index = last_index - 1;
     }
 }

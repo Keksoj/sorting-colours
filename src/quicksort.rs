@@ -31,7 +31,7 @@ pub fn quicksort(vector: Vec<u32>) {
     );
 }
 
-// check if
+// check if sorted
 fn is_sorted(deep: &Vec<Vec<u32>>) -> bool {
     let length: u32 = deep.len() as u32;
     let mut number_of_singles: u32 = 0;
