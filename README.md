@@ -19,6 +19,11 @@ Then swap the new first element (which is the *second* largest of the array) wit
 
 The main documentation for this exercise has been [wikipedia's article on binary heaps](https://www.wikiwand.com/en/Binary_heap).
 
+## A bit about quicksort
+
+Quicksort consists in using the last value of the list as a *pivot* and sort values left and right of it.
+Both newly created lists will be split around their own pivot, and so on until there is nothing left to split. 
+
 ## About the colours
 
 I discovered Termion's [rainbow example](https://github.com/redox-os/termion/blob/master/examples/rainbow.rs) and found out a nice way of displaying RGB colours in a terminal:

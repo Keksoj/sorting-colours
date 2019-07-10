@@ -19,18 +19,18 @@ fn main() {
     // // quicksort the red
     // quicksort(&mut stdout, &mut rainbow, 0);
 
-    // scramble all three colors
-    for i in 0..3 {
-        scramble(&mut stdout, &mut rainbow, i);
-        thread::sleep(time::Duration::from_secs(2));
-        show(&mut stdout, &rainbow);
-    }
-    // QUICKSORT
-    for i in 0..3 {
-        quicksort(&mut stdout, &mut rainbow, i);
-        thread::sleep(time::Duration::from_secs(1));
-        show(&mut stdout, &rainbow);
-    }
+    // // scramble all three colors
+    // for i in 0..3 {
+    //     scramble(&mut stdout, &mut rainbow, i);
+    //     thread::sleep(time::Duration::from_secs(2));
+    //     show(&mut stdout, &rainbow);
+    // }
+    // // QUICKSORT
+    // for i in 0..3 {
+    //     quicksort(&mut stdout, &mut rainbow, i);
+    //     thread::sleep(time::Duration::from_secs(1));
+    //     show(&mut stdout, &rainbow);
+    // }
 
     // scramble all three colors
     for i in 0..3 {
@@ -148,7 +148,7 @@ pub fn heapify<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
                 index = p_i;
                 // display and wait a bit (for display purpose)
                 show(&mut stdout, &rainbow);
-                thread::sleep(time::Duration::from_millis(30));
+                thread::sleep(time::Duration::from_millis(60));
             } else {
                 break; // break if the parent was actually larger
             }
@@ -187,7 +187,7 @@ pub fn heapsort<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
 
             // Display and wait
             show(&mut stdout, &rainbow);
-            thread::sleep(time::Duration::from_millis(30));
+            thread::sleep(time::Duration::from_millis(60));
 
             // Compare with the children, swap if necessary
             // case one: larger child is the left one
