@@ -1,5 +1,3 @@
-use std::{thread, time};
-
 pub fn quicksort(vector: Vec<u32>) {
     // do the first split
     let depth_one = split_in_three(vector);
