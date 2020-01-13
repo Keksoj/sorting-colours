@@ -14,38 +14,33 @@ fn main() {
 
     let mut rainbow = Rainbow::new();
 
-    // // scramble the red
-    // scramble(&mut stdout, &mut rainbow, 0);
-    // // quicksort the red
-    // quicksort(&mut stdout, &mut rainbow, 0);
-
-    // // scramble all three colors
-    // for i in 0..3 {
-    //     scramble(&mut stdout, &mut rainbow, i);
-    //     thread::sleep(time::Duration::from_secs(2));
-    //     show(&mut stdout, &rainbow);
-    // }
-    // // QUICKSORT
-    // for i in 0..3 {
-    //     quicksort(&mut stdout, &mut rainbow, i);
-    //     thread::sleep(time::Duration::from_secs(1));
-    //     show(&mut stdout, &rainbow);
-    // }
-
     // scramble all three colors
     for i in 0..3 {
         scramble(&mut stdout, &mut rainbow, i);
         thread::sleep(time::Duration::from_secs(2));
         show(&mut stdout, &rainbow);
     }
-    // HEAPSORT
-    // heapify all three colors
+    // QUICKSORT
+    for i in 0..3 {
+        quicksort(&mut stdout, &mut rainbow, i);
+        thread::sleep(time::Duration::from_secs(1));
+        show(&mut stdout, &rainbow);
+    }
+
+    // scramble again
+    for i in 0..3 {
+        scramble(&mut stdout, &mut rainbow, i);
+        thread::sleep(time::Duration::from_secs(2));
+        show(&mut stdout, &rainbow);
+    }
+    
+    // heapify
     for i in 0..3 {
         heapify(&mut stdout, &mut rainbow, i);
         thread::sleep(time::Duration::from_secs(1));
         show(&mut stdout, &rainbow);
     }
-    // heapsort all three colors
+    // heapsort
     for i in 0..3 {
         heapsort(&mut stdout, &mut rainbow, i);
         thread::sleep(time::Duration::from_secs(1));
@@ -113,7 +108,7 @@ pub fn scramble<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
     // half, reapeat a thousand times. Surely not optimal, but it works
     for n in 0..1000 {
         let random_index: usize = rand::thread_rng().gen_range(0, 128);
-        let random_other: usize = rand::thread_rng().gen_range(128, rainbow.rgb[color].len());
+        let ranKdom_other: usize = rand::thread_rng().gen_range(128, rainbow.rgb[color].len());
         if n % 100 == 0 {
             thread::sleep(time::Duration::from_millis(200));
             show(&mut stdout, &rainbow);
@@ -123,14 +118,14 @@ pub fn scramble<W: Write>(mut stdout: W, rainbow: &mut Rainbow, color: usize) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//       _   _   _____      _      ____    ____     ____    ____    _____     //
-//      | | | | | ____|    / \    |  _ \  / ___|   / __ \  |  _ \  |_   _|    //
-//      | |_| | |  _|     / _ \   | |_) | \___ \  | |  | | | |_) |   | |      //
-//      |  _  | | |___   / ___ \  |  __/   ___) | | |__| | |  _ <    | |      //
-//      |_| |_| |_____| /_/   \_\ |_|     |____/   \____/  |_| \_\   |_|      //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//       _   _   _____      _      ____    ____     ____    ____    _____    //
+//      | | | | | ____|    / \    |  _ \  / ___|   / __ \  |  _ \  |_   _|   //
+//      | |_| | |  _|     / _ \   | |_) | \___ \  | |  | | | |_) |   | |     //
+//      |  _  | | |___   / ___ \  |  __/   ___) | | |__| | |  _ <    | |     //
+//      |_| |_| |_____| /_/   \_\ |_|     |____/   \____/  |_| \_\   |_|     //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
 // the heapify function takes a rainbow.rgb[color] vector and constructs a binary heap
 // in place, iterating and trickling up each element
