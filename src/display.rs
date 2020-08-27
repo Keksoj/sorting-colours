@@ -62,7 +62,7 @@ impl<W: Write> Rainbow<W> {
             let random_index: usize = rand::thread_rng().gen_range(0, 128);
             let random_other: usize = rand::thread_rng().gen_range(128, self.rgb[color].len());
             if n % 100 == 0 {
-                wait(self.speed);
+                self.wait();
                 self.show();
             }
             self.rgb[color].swap(random_index, random_other);
@@ -84,7 +84,7 @@ impl<W: Write> Rainbow<W> {
                     index = parent_index;
                     // display and wait a bit (for display purpose)
                     self.show();
-                    wait(self.speed);
+                    self.wait();
                 } else {
                     break;
                 }
@@ -121,7 +121,7 @@ impl<W: Write> Rainbow<W> {
 
                 // Display and wait
                 self.show();
-                wait(self.speed);
+                self.wait();
 
                 // Compare with the children, swap if necessary
                 // case one: the left child is larger
@@ -168,8 +168,7 @@ impl<W: Write> Rainbow<W> {
                 self.rgb[color].insert(pivot_i, swaped);
                 // We have to keep track of the pivot, it shifted left
                 pivot_i -= 1;
-                wait(self.speed);
-
+                self.wait();
                 self.show();
             // if the element is smaller, go check the next
             } else {
@@ -209,7 +208,7 @@ impl<W: Write> Rainbow<W> {
                         self.rgb[color].insert(new_pivot_index, swaped);
                         new_pivot_index -= 1;
                         self.show();
-                        wait(self.speed);
+                        self.wait();
                     } else {
                         start_index += 1;
                     }
@@ -230,7 +229,7 @@ impl<W: Write> Rainbow<W> {
                         let swaped = self.rgb[color].remove(start_index);
                         self.rgb[color].insert(last_pivot_index, swaped);
                         last_pivot_index -= 1;
-                        wait(self.speed);
+                        self.wait();
                         self.show();
                     } else {
                         start_index += 1;
@@ -241,10 +240,10 @@ impl<W: Write> Rainbow<W> {
         }
         self.show();
     }
-}
 
-pub fn wait(milliseconds: u64) {
-    thread::sleep(time::Duration::from_millis(milliseconds));
+    fn wait(&self) {
+        thread::sleep(time::Duration::from_millis(self.speed));
+    }
 }
 
 // we had the thread panicking at 'attempt to subtract with overflow' for such

@@ -9,7 +9,7 @@ use termion::color;
 use termion::raw::IntoRawMode;
 
 mod display;
-use display::{wait, Rainbow};
+use display::Rainbow;
 
 fn main() {
     let stdout = stdout().into_raw_mode().unwrap();
@@ -45,4 +45,8 @@ fn main() {
         wait(1000);
         rainbow.show();
     }
+}
+
+fn wait(milliseconds: u64) {
+    thread::sleep(time::Duration::from_millis(milliseconds));
 }
