@@ -5,7 +5,7 @@ use std::{thread, time};
 // This struct contains all three vectors of RGB values
 #[derive(Debug)]
 pub struct Rainbow<W: Write> {
-    rgb: Vec<Vec<u8>>,
+    rgb: [Vec<u8>; 3],
     stdout: W,
     speed: u64,
 }
@@ -20,10 +20,7 @@ impl<W: Write> Rainbow<W> {
             green.push(n);
             blue.push(n);
         }
-        let mut rgb: Vec<Vec<u8>> = Vec::new();
-        rgb.push(red);
-        rgb.push(green);
-        rgb.push(blue);
+        let rgb: [Vec<u8>; 3] = [red, green, blue];
 
         let speed: u64 = 30;
 
