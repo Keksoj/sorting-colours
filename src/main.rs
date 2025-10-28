@@ -1,11 +1,8 @@
 // 2019-06-27
 // Let's dive into sorting algorithms.
 
-use rand::Rng;
-// use std::cmp::Ordering;
-use std::io::{stdout, Write};
+use std::io::stdout;
 use std::{thread, time};
-use termion::color;
 use termion::raw::IntoRawMode;
 
 mod display;

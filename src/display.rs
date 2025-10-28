@@ -1,6 +1,7 @@
-use rand::Rng;
-use std::io::{stdout, Write};
+use std::io::Write;
 use std::{thread, time};
+
+use rand::{rng, Rng};
 
 // This struct contains all three vectors of RGB values
 #[derive(Debug)]
@@ -56,8 +57,8 @@ impl<W: Write> Rainbow<W> {
 
     pub fn scramble(&mut self, color: usize) {
         for n in 0..1000 {
-            let random_index: usize = rand::thread_rng().gen_range(0, 128);
-            let random_other: usize = rand::thread_rng().gen_range(128, self.rgb[color].len());
+            let random_index: usize = rng().random_range(0..127);
+            let random_other: usize = rng().random_range(128..self.rgb[color].len());
             if n % 100 == 0 {
                 self.wait();
                 self.show();
